@@ -16,7 +16,11 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    App\Service\WeatherService:
+    App\Service\OpenMeteoWeatherService:
         arguments:
             $days: 4
             $temperatureUnit: 'celsius'
+    App\Service\WeatherServiceInterface: '@App\Service\OpenMeteoWeatherService'
+    App\Command\WeatherCommand:
+        arguments:
+            $ws: '@=env("wp") == "tomorrow-io" ? service("App\\Service\\TomorrowWeatherService") : service("App\\Service\\OpenMeteoWeatherService")'
